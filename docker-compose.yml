@@ -1,0 +1,41 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: postgres_db
+    restart: always
+    environment:
+      POSTGRES_DB: webhook_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:7
+    container_name: redis
+    ports:
+      - "6379:6379"
+
+  web:
+    build: .
+    container_name: django_app
+    command: >
+      sh -c "python manage.py migrate &&
+             gunicorn core.wsgi:application --bind 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    build: .
+    container_name: celery_worker
+    command: celery -A core worker -l info
+    depends_on:
+      - db
+      - redis
