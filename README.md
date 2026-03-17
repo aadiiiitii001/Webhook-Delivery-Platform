@@ -78,11 +78,13 @@ manage.py
 ## 🔑 Core Features
 
 ### 1. Webhook Registration
-POST /api/webhooks
+
+- POST /api/webhooks
 ---
 
 ### 2. Event Publishing
-POST /api/events
+
+- POST /api/events
 ---
 
 ### 3. Asynchronous Delivery System
