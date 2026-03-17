@@ -187,5 +187,4 @@ Trigger Event
 - OpenAPI / Swagger docs
 - Monitoring & alerting
 
-### 👩‍💻 Author
-Aditi Nayak
+### 👩‍💻 Author - Aditi Nayak
