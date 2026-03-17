@@ -79,12 +79,9 @@ manage.py
 
 ### 1. Webhook Registration
 POST /api/webhooks
-
-
 ---
 
 ### 2. Event Publishing
-
 POST /api/events
 ---
 
