@@ -6,3 +6,4 @@ celery
 django-environ
 djangorestframework
 django-filter
+django-cors-headers
