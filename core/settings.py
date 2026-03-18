@@ -21,10 +21,10 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
 
-    "apps.users",
-    "apps.webhooks",
-    "apps.events",
-    "apps.deliveries",
+    "app.users",
+    "app.webhooks",
+    "app.events",
+    "app.deliveries",
 ]
 
 # Custom User Model
