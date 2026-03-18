@@ -1,9 +1,6 @@
 Django
-djangorestframework
-psycopg2-binary
-celery
-redis
 gunicorn
-django-filter
-djangorestframework-simplejwt
-requests
+psycopg2-binary
+redis
+celery
+django-environ
