@@ -1,41 +1,19 @@
-version: "3.9"
+FROM python:3.11-slim
 
-services:
-  db:
-    image: postgres:15
-    container_name: postgres_db
-    restart: always
-    environment:
-      POSTGRES_DB: webhook_db
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-    ports:
-      - "5432:5432"
+WORKDIR /app
 
-  redis:
-    image: redis:7
-    container_name: redis
-    ports:
-      - "6379:6379"
+# System deps (for psycopg2)
+RUN apt-get update && apt-get install -y gcc libpq-dev
 
-  web:
-    build: .
-    container_name: django_app
-    command: >
-      sh -c "python manage.py migrate &&
-             gunicorn core.wsgi:application --bind 0.0.0.0:8000"
-    volumes:
-      - .:/app
-    ports:
-      - "8000:8000"
-    depends_on:
-      - db
-      - redis
+# Install Python deps
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-  worker:
-    build: .
-    container_name: celery_worker
-    command: celery -A core worker -l info
-    depends_on:
-      - db
-      - redis
+# Copy project
+COPY . .
+
+# Environment
+ENV PYTHONUNBUFFERED=1
+
+# Default command (Web service)
+CMD ["gunicorn", "core.wsgi:application", "--bind", "0.0.0.0:8000"]
