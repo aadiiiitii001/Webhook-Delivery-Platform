@@ -3,7 +3,7 @@ import requests
 from django.utils import timezone
 from app.webhooks.models import Webhook
 from app.events.models import Event
-from app.models import Delivery
+from .models import Delivery
 import hmac
 import hashlib
 import json
