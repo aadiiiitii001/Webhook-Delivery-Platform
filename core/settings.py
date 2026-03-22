@@ -6,16 +6,16 @@ import environ
 # Base directory
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Initialize environment variables
+# Env setup
 env = environ.Env()
-environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
+environ.Env.read_env(BASE_DIR / ".env")
 
-# Security
+# SECURITY
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=[])
 
-# Applications
+# APPLICATIONS
 INSTALLED_APPS = [
     "django.contrib.admin",
     "django.contrib.auth",
@@ -27,19 +27,21 @@ INSTALLED_APPS = [
     # Third-party
     "rest_framework",
     "django_filters",
+    "corsheaders",
 
-    # Local apps (IMPORTANT FIX HERE)
-    "app.users.apps.UsersConfig",
+    # Local
+    "app.users",
     "app.webhooks",
     "app.events",
     "app.deliveries",
 ]
 
-# Custom User Model
+# CUSTOM USER
 AUTH_USER_MODEL = "users.User"
 
-# Middleware
+# MIDDLEWARE
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",  # must be high
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -48,10 +50,13 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
 ]
 
-# URLs
+# CORS (fix your unused dependency)
+CORS_ALLOW_ALL_ORIGINS = True  # lock this down later
+
+# URLS
 ROOT_URLCONF = "core.urls"
 
-# Templates
+# TEMPLATES
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
@@ -70,35 +75,36 @@ TEMPLATES = [
 # WSGI
 WSGI_APPLICATION = "core.wsgi.application"
 
-# Database (Render PostgreSQL via DATABASE_URL)
+# DATABASE
 DATABASES = {
     "default": env.db("DATABASE_URL")
 }
 
-# Django REST Framework
+# DRF
 REST_FRAMEWORK = {
-    "DEFAULT_AUTHENTICATION_CLASSES": (
+    "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework_simplejwt.authentication.JWTAuthentication",
-    ),
-    "DEFAULT_PERMISSION_CLASSES": (
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
-    ),
+    ],
 }
 
 # JWT
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
     "AUTH_HEADER_TYPES": ("Bearer",),
 }
 
-# Celery (Redis from Render)
+# CELERY
 CELERY_BROKER_URL = env("REDIS_URL")
 CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 
-# Static files
+# STATIC
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
-# Default primary key field type
+# DEFAULT FIELD
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
