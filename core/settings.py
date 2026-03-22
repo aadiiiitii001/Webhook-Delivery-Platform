@@ -28,8 +28,8 @@ INSTALLED_APPS = [
     "rest_framework",
     "django_filters",
 
-    # Local apps
-    "app.users",
+    # Local apps (IMPORTANT FIX HERE)
+    "app.users.apps.UsersConfig",
     "app.webhooks",
     "app.events",
     "app.deliveries",
