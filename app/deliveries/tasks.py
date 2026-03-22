@@ -1,9 +1,9 @@
 from celery import shared_task
 import requests
 from django.utils import timezone
-from apps.webhooks.models import Webhook
-from apps.events.models import Event
-from .models import Delivery
+from app.webhooks.models import Webhook
+from app.events.models import Event
+from app.models import Delivery
 import hmac
 import hashlib
 import json
