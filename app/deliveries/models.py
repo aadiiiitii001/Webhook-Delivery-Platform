@@ -1,6 +1,6 @@
 from django.db import models
-from apps.webhooks.models import Webhook
-from apps.events.models import Event
+from app.webhooks.models import Webhook
+from app.events.models import Event
 
 class Delivery(models.Model):
     STATUS_CHOICES = [
