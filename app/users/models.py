@@ -7,5 +7,14 @@ class User(AbstractUser):
         ("developer", "Developer"),
     ]
 
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES, default="developer")
+    role = models.CharField(
+        max_length=20,
+        choices=ROLE_CHOICES,
+        default="developer",
+        db_index=True
+    )
+
     created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.username
